@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func commandHelp() error {
+func commandHelp(cfg *config) error { // TODO help and exit shouldn't have config?
 	fmt.Println()
 	fmt.Println("Welcome to the Pokedex help menu!")
 	fmt.Println("Here are your availble commands:")
