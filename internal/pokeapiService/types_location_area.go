@@ -1,6 +1,5 @@
 package pokeapiService
 
-// TODO Move to internal package
 type LocationAreasResponse struct { // Capitalized because we want it to be exported form this package
 	Count    int     `json:"count"`
 	Next     *string `json:"next"`     //At the end of last paginated URL, there will be no next page

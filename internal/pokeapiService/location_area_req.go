@@ -13,7 +13,7 @@ func (c *Client) ListLocationAreas(pageURL *string) (LocationAreasResponse, erro
 	if pageURL != nil {
 		fullURL = *pageURL
 	}
-
+	// I want cache here?
 	req, err := http.NewRequest("GET", fullURL, nil)
 
 	if err != nil {
