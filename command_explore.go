@@ -1,12 +1,17 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 )
 
-func callbackExplore(cfg *config, location string) error {
+func callbackExplore(cfg *config, args ...string) error {
+	if len(args) != 1 {
+		return errors.New("No location provided")
+	}
+	location := args[0]
 
-	res, err := cfg.pokeapiServiceClient.ListLocationDetails(cfg.nextLocationAreaURL, location)
+	res, err := cfg.pokeapiServiceClient.GetLocationDetails(location)
 	if err != nil {
 		// log.Fatal(err)
 		return err

@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func callbackMap(cfg *config, location string) error {
+func callbackMap(cfg *config, args ...string) error {
 	// Below not needed as we'll just go back to the beginning?
 	// if cfg.nextLocationAreaURL != nil {
 	// 	return errors.New("No more areas, you're on the last page")

@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func commandHelp(cfg *config, location string) error { // NOTE help and exit shouldn't have config? // Seems instructor uses this...
+func commandHelp(cfg *config, args ...string) error { // NOTE help and exit shouldn't have config? // Seems instructor uses this...
 	fmt.Println()
 	fmt.Println("Welcome to the Pokedex help menu!")
 	fmt.Println("Here are your availble commands:")

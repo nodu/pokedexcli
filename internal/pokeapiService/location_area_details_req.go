@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func (c *Client) ListLocationDetails(pageURL *string, location string) (LocationAreasDetailResponse, error) {
+func (c *Client) GetLocationDetails(location string) (LocationAreasDetailResponse, error) {
 	fullURL := baseURL + "/location-area/" + location
 
 	cachedData, found := c.cache.Get(fullURL)

@@ -23,9 +23,9 @@ func startRepl(cfg *config) {
 		}
 
 		commandName := cleaned[0] //safe index operation, bc len check
-		location := ""
-		if len(cleaned) == 2 {
-			location = cleaned[1]
+		args := []string{}
+		if len(cleaned) > 1 {
+			args = cleaned[1:]
 		}
 
 		command, exists := getCommands()[commandName]
@@ -35,7 +35,7 @@ func startRepl(cfg *config) {
 			continue
 		}
 
-		err := command.callback(cfg, location) // NOTE code smells because *config and location
+		err := command.callback(cfg, args...) // NOTE code smells because *config and location
 		// but not needed on all commands
 		if err != nil {
 			fmt.Println(err)
@@ -52,7 +52,7 @@ func cleanInput(str string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config, string) error
+	callback    func(*config, ...string) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -78,7 +78,7 @@ func getCommands() map[string]cliCommand {
 			callback:    callbackMapb,
 		},
 		"explore": {
-			name:        "explore",
+			name:        "explore {location}",
 			description: "Displays pokemon in an area",
 			callback:    callbackExplore,
 		},
