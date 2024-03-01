@@ -4,7 +4,7 @@ import (
 	"os"
 )
 
-func commandExit(cfg *config) error { // TODO help and exit shouldn't have config?
+func commandExit(cfg *config, location string) error { // NOTE help and exit shouldn't have config? // Seems instructor uses this...
 	os.Exit(0)
 
 	return nil

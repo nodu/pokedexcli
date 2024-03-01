@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func callbackMapb(cfg *config) error {
+func callbackMapb(cfg *config, location string) error {
 	if cfg.prevLocationAreaURL == nil {
 		return errors.New("Can't go back, you're on the first page")
 	}
@@ -26,4 +26,3 @@ func callbackMapb(cfg *config) error {
 	return nil
 
 }
-
