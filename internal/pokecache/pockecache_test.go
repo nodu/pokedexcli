@@ -6,6 +6,13 @@ import (
 	"time"
 )
 
+func TestCreateCache(t *testing.T) {
+	cache := NewCache(10 * time.Second)
+	if cache.data == nil {
+		t.Error("Cache is nil")
+	}
+}
+
 func TestAddGet(t *testing.T) {
 	const interval = 5 * time.Second
 	cases := []struct {

@@ -1,7 +1,6 @@
 package pokecache
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -18,68 +17,59 @@ type cacheEntry struct {
 
 func (c Cache) Add(key string, val []byte) {
 	c.mu.Lock()
-	// kstr := "key" + time.Now().Format(time.UnixDate)
-	// fmt.Println("Adding...", kstr)
+	defer c.mu.Unlock()
 	c.data[key] = cacheEntry{createdAt: time.Now(), val: val}
-	c.mu.Unlock()
 }
 
 func (c Cache) Get(key string) ([]byte, bool) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-
 	entry, ok := c.data[key]
-	if !ok {
-		fmt.Println("couldn't find key: ", key)
-		return []byte{}, false
-	}
-
-	// fmt.Println("Found key: ", key, entry.val, entry.createdAt)
-	//entry and it's found
-	return entry.val, true
+	return entry.val, ok
 }
 
 func (c Cache) reapLoop(interval time.Duration) {
-	// ticker := time.NewTicker(interval * time.Second)
 	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
 	defer c.mu.Unlock()
-	// c.Add("new", []byte("howdy"))
-	// fmt.Println("reaping... maybe")
 	for {
 		select {
 		case timeNow := <-ticker.C:
-			// fmt.Println("timeNow", timeNow)
-			// c.Get("new")
 			c.mu.Lock()
 			for key, entry := range c.data {
-				fmt.Println("entry + interval", entry.createdAt.Add(interval))
 				isOld := entry.createdAt.Add(interval).Before(timeNow)
 				if isOld {
 					delete(c.data, key)
-					fmt.Println("deleted key: ", key)
 				}
 			}
 			c.mu.Unlock()
-			// fmt.Println("end of case")
 		}
-		// fmt.Println("end of select")
 	}
 }
 
+// Or:
+// func (c *Cache) reapLoopAlt(interval time.Duration) {
+// 	ticker := time.NewTicker(interval)
+// 	for range ticker.C { // instead of the for select idiom
+// 		c.reap(time.Now(), interval)
+// 	}
+// }
+//
+// func (c *Cache) reap(now time.Time, last time.Duration) {
+// 	c.mu.Lock()
+// 	defer c.mu.Unlock()
+// 	for k, v := range c.data {
+// 		if v.createdAt.Before(now.Add(-last)) {
+// 			delete(c.data, k)
+// 		}
+// 	}
+// }
+
 func NewCache(interval time.Duration) Cache {
 	cache := Cache{
-		data: map[string]cacheEntry{
-			// 	"key1": {
-			// 		createdAt: time.Now().Add(-3 * time.Minute),
-			// 		val:       []byte("value1"),
-			// 	},
-			// 	"key2": {
-			// 		createdAt: time.Now().Add(5 * time.Second),
-			// 		val:       []byte("value1"),
-			// 	},
-		},
-		mu: new(sync.Mutex), // Proper mutex initialization
+		data: make(map[string]cacheEntry),
+		// mu:   new(sync.Mutex), // Proper mutex initialization
+		mu: &sync.Mutex{},
 	}
 	go cache.reapLoop(interval)
 	return cache
