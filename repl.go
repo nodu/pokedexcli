@@ -8,6 +8,10 @@ import (
 )
 
 func startRepl(cfg *config) {
+	fmt.Println("c pikachu")
+	fmt.Println("c bulbasaur")
+	fmt.Println("i pikachu")
+	fmt.Println("i bulbasaur")
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Printf("pokedex > ")
@@ -81,6 +85,26 @@ func getCommands() map[string]cliCommand {
 			name:        "explore {location}",
 			description: "Displays pokemon in an area",
 			callback:    callbackExplore,
+		},
+		"catch": {
+			name:        "catch {pokemon}",
+			description: "Throw a pokeball at a pokemon!",
+			callback:    callbackCatch,
+		},
+		"inspect": {
+			name:        "inspect {pokemon*optional}",
+			description: "Open your Pokedex",
+			callback:    callbackInspect,
+		},
+		"c": {
+			name:        "c {pokemon}",
+			description: "Throw a pokeball at a pokemon!",
+			callback:    callbackCatch,
+		},
+		"i": {
+			name:        "i {pokemon*optional}",
+			description: "Open your Pokedex",
+			callback:    callbackInspect,
 		},
 	}
 }
