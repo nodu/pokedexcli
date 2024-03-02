@@ -12,23 +12,23 @@ func callbackCatch(cfg *config, args ...string) error {
 	}
 	name := args[0]
 
-	res, err := cfg.pokeapiServiceClient.GetPokemon(name)
+	pokemon, err := cfg.pokeapiServiceClient.GetPokemon(name)
 	if err != nil {
 		// log.Fatal(err)
 		return err
 	}
 
-	fmt.Printf("Throwing a Pokeball at %v...\n", name)
-	diceRoll := rand.Intn(res.BaseExperience)
+	fmt.Printf("Throwing a Pokeball at %v...\n", pokemon.Name)
+	diceRoll := rand.Intn(pokemon.BaseExperience)
 	chance := 50
-	fmt.Println("roll", diceRoll, "\n", "chanceToCatch", chance)
+	// fmt.Println("roll", diceRoll, "\n", "chanceToCatch", chance)
 	if diceRoll > chance {
-		fmt.Printf("%s escaped!\n", name)
+		fmt.Printf("%s escaped!\n", pokemon.Name)
 		return nil
 	}
 
-	fmt.Printf("%s was caught!\n", name)
+	fmt.Printf("%s was caught!\n", pokemon.Name)
 	//save pokemon data for later
-	cfg.pokedex.data[name] = res
+	cfg.pokedex[pokemon.Name] = pokemon
 	return nil
 }
